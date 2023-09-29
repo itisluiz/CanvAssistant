@@ -1,0 +1,21 @@
+{
+	"name": "canvassistant",
+	"version": "0.0.0",
+	"description": "",
+	"main": "index.js",
+	"type": "module",
+	"scripts": {
+		"start": "node index.js",
+		"watch": "nodemon index.js"
+	},
+	"author": "itisluiz",
+	"license": "ISC",
+	"dependencies": {
+		"@kth/canvas-api": "^4.2.5",
+		"discord.js": "^14.13.0",
+		"dotenv": "^16.3.1",
+		"mariadb": "^3.2.1",
+		"openai": "^4.10.0",
+		"sequelize": "^6.33.0"
+	}
+}
