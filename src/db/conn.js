@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize';
-import { prepareModels } from './models.js'
+import { prepareModels } from './model.js'
 
 let sequelize = null, models = null;
 
