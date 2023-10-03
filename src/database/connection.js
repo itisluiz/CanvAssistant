@@ -1,7 +1,9 @@
 import { Sequelize } from 'sequelize';
-import { prepareModels } from './model.js'
+import { loadModels } from './models.js';
+import { logDebug } from '../util/logging.js';
 
-let sequelize = null, models = null;
+let sequelize = null
+let models = null;
 
 async function closeSequelize()
 {
@@ -22,11 +24,11 @@ async function getSequelize(forceNew = false)
 			host: process.env.DB_HOST,
 			port: process.env.DB_PORT,
 			dialect: 'mariadb',
-			logging: process.env.DB_SEQUELIZELOG === '1' ? (msg) => console.log('SEQUELIZE:', msg) : false
+			logging: (what) => logDebug('sequelize', what)
 		});
 
 		await sequelize.authenticate();
-		models = prepareModels(sequelize);
+		models = await loadModels(sequelize);
 		await sequelize.sync();
 	}
 	

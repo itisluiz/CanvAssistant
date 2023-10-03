@@ -1,3 +1,4 @@
 import 'dotenv/config'
+import { logInfo } from './src/util/logging.js'
 
-console.log('Hello world');
+logInfo('index.js', 'Hello world');

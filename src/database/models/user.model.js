@@ -1,8 +1,9 @@
 import { DataTypes } from 'sequelize';
 
-function prepareModels(sequelize)
+export const modelName = 'User';
+export function define(sequelize)
 {
-	const User = sequelize.define('User', {
+	return sequelize.define(modelName, {
 		discordUID: {
 			type: DataTypes.CHAR(18),
 			allowNull: false,
@@ -17,8 +18,4 @@ function prepareModels(sequelize)
 			defaultValue: null,
 		}
 	});
-
-	return { User };
 };
-
-export { prepareModels };
