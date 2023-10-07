@@ -5,7 +5,7 @@ import { logDebug } from '../util/logging.js';
 let sequelize = null
 let models = null;
 
-async function closeSequelize()
+export async function closeSequelize()
 {
 	if (sequelize)
 		await sequelize.close();
@@ -13,7 +13,7 @@ async function closeSequelize()
 	sequelize = null;
 }
 
-async function getSequelize(forceNew = false)
+export async function getSequelize(forceNew = false)
 {
 	if (!sequelize || forceNew)
 	{
@@ -34,5 +34,3 @@ async function getSequelize(forceNew = false)
 	
 	return { sequelize, models };
 }
-
-export { getSequelize, closeSequelize };
