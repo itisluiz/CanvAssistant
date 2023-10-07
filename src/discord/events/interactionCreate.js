@@ -1,4 +1,5 @@
 import { Events } from "discord.js";
+import { logDebug } from "../../util/logging.js";
 
 export const event = Events.InteractionCreate;
 

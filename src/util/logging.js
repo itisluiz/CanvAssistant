@@ -1,17 +1,13 @@
 import chalk from "chalk";
+import CryptoJS from "crypto-js";
 
 const logLevel = parseInt(process.env.LOG_LEVEL);
 const chalkColors = [chalk.red, chalk.green, chalk.yellow, chalk.blue, chalk.magenta, chalk.cyan, chalk.redBright, chalk.greenBright, chalk.yellowBright, chalk.blueBright, chalk.magentaBright, chalk.cyanBright];
 
 function originColor(origin)
 {
-	let hashDjb2 = 0;
-	origin = origin.toLowerCase();
-
-	for (let i = 0; i < origin.length; i++)
-		hashDjb2 = (hashDjb2 << 5) - hashDjb2 + origin.charCodeAt(i);
-
-	return chalkColors[Math.abs(hashDjb2) % chalkColors.length];
+	const hash = parseInt(CryptoJS.MD5(origin), 16);
+	return chalkColors[hash % chalkColors.length];
 }
 
 function formattedTime()

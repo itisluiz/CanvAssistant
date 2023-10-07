@@ -1,14 +1,22 @@
-import { REST, SlashCommandBuilder, Routes } from "discord.js";
-import { importDirectory } from "../util/importing.js";
+import { checkUpdateHash, hashModules, importDirectory } from "../util/importing.js";
+import { logDebug, logInfo } from "../util/logging.js";
 
 export async function loadCommands(client)
 {
 	const commandModules = await importDirectory('./src/discord/commands');
-	const applicationCommands = await client.application.commands.set(commandModules.map(commandModule => commandModule.command));
-	
-	return applicationCommands.reduce((acc, applicationCommand) => {
-		const commandModule = commandModules.find(cmdModule => cmdModule.command.name == applicationCommand.name);
-		acc[applicationCommand.name] = {command: applicationCommand, execute: commandModule.execute}
+	const updatedHash = await checkUpdateHash('./src/discord/commands.md5', hashModules(commandModules));
+
+	if (updatedHash)
+		logDebug('commands', 'Module hash up to date');
+	else
+	{
+		logDebug('commands', 'Module hash changed, updating all commands');
+		await client.application.commands.set(commandModules.map(commandModule => commandModule.command));
+	}
+  	
+	logInfo('commands', `Loaded ${commandModules.length} command(s)`);
+	return commandModules.reduce((acc, commandModule) => {
+		acc[commandModule.command.name] = commandModule
 		return acc;
 	}, {});
 }
