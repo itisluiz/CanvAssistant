@@ -43,7 +43,7 @@ export function hashModules(importedModules)
 			else
 				stringfiedProperty = importedProperty.toString();
 
-			hashes.push(CryptoJS.MD5(stringfiedProperty).toString());
+			hashes.push(CryptoJS.MD5(importedName + stringfiedProperty).toString());
 		}
 	}
 

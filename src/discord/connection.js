@@ -1,6 +1,7 @@
 import { Client, GatewayIntentBits, Events } from "discord.js";
 import { loadCommands } from "./commands.js";
 import { registerEvents } from "./events.js";
+import { logInfo } from "../util/logging.js";
 
 let client = null;
 
@@ -33,6 +34,7 @@ export async function getDiscordClient(forceNew = false)
 		await registerEvents(client);
 		await client.login(process.env.DC_TOKEN);
 		await clientReady;
+		logInfo('discord', `Client online as "${client.user.displayName}"`);
 		client.commands = await loadCommands(client);
 	}
 	

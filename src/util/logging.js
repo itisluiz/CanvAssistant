@@ -6,7 +6,8 @@ const chalkColors = [chalk.red, chalk.green, chalk.yellow, chalk.blue, chalk.mag
 
 function originColor(origin)
 {
-	const hash = parseInt(CryptoJS.MD5(origin), 16);
+	// Slice attempts to improve the 'evenness' of the resulting colors
+	const hash = parseInt(CryptoJS.MD5(origin).toString().slice(-2), 16);
 	return chalkColors[hash % chalkColors.length];
 }
 

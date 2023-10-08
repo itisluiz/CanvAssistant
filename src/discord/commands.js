@@ -7,14 +7,14 @@ export async function loadCommands(client)
 	const updatedHash = await checkUpdateHash('./src/discord/commands.md5', hashModules(commandModules));
 
 	if (updatedHash)
-		logDebug('commands', 'Module hash up to date');
+		logDebug('discord', 'Command hashes up to date');
 	else
 	{
-		logDebug('commands', 'Module hash changed, updating all commands');
+		logDebug('discord', 'Command hashes changed, updating all commands');
 		await client.application.commands.set(commandModules.map(commandModule => commandModule.command));
 	}
-  	
-	logInfo('commands', `Loaded ${commandModules.length} command(s)`);
+	
+	logInfo('discord', `Loaded ${commandModules.length} command(s)`);
 	return commandModules.reduce((acc, commandModule) => {
 		acc[commandModule.command.name] = commandModule
 		return acc;
