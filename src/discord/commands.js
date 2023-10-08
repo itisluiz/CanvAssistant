@@ -1,16 +1,14 @@
 import { checkUpdateHash, hashModules, importDirectory } from "../util/importing.js";
-import { logDebug, logInfo } from "../util/logging.js";
+import { logInfo } from "../util/logging.js";
 
 export async function loadCommands(client)
 {
 	const commandModules = await importDirectory('./src/discord/commands');
 	const updatedHash = await checkUpdateHash('./src/discord/commands.md5', hashModules(commandModules, ['command'], true));
 
-	if (updatedHash)
-		logDebug('discord', 'Command hashes up to date');
-	else
+	if (!updatedHash)
 	{
-		logDebug('discord', 'Command hashes changed, updating all commands');
+		logInfo('discord', 'Command hashes changed, updating all commands');
 		await client.application.commands.set(commandModules.map(commandModule => commandModule.command));
 	}
 	

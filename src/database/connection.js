@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize';
 import { loadModels } from './models.js';
-import { logDebug } from '../util/logging.js';
+import { logDebug, logInfo } from '../util/logging.js';
 
 let sequelize = null
 let models = null;
@@ -28,6 +28,7 @@ export async function getSequelize(forceNew = false)
 		});
 
 		await sequelize.authenticate();
+		logInfo('sequelize', `Authenticated to database "${sequelize.getDatabaseName()}"`);
 		models = await loadModels(sequelize);
 		await sequelize.sync();
 	}
