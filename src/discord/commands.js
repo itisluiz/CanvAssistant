@@ -4,7 +4,7 @@ import { logDebug, logInfo } from "../util/logging.js";
 export async function loadCommands(client)
 {
 	const commandModules = await importDirectory('./src/discord/commands');
-	const updatedHash = await checkUpdateHash('./src/discord/commands.md5', hashModules(commandModules));
+	const updatedHash = await checkUpdateHash('./src/discord/commands.md5', hashModules(commandModules, ['command'], true));
 
 	if (updatedHash)
 		logDebug('discord', 'Command hashes up to date');

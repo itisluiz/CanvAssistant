@@ -28,13 +28,16 @@ export async function checkUpdateHash(hashFilePath, expectedHash)
 	return false;
 }
 
-export function hashModules(importedModules)
+export function hashModules(importedModules, exportFilter = [], isFilterWhitelist = false)
 {
 	let hashes = [];
 	for (const importedModule of importedModules)
 	{
 		for (const importedName in importedModule)
 		{
+			if ((!isFilterWhitelist && exportFilter.includes(importedName)) || (isFilterWhitelist && !exportFilter.includes(importedName)))
+				continue;
+
 			const importedProperty = importedModule[importedName];
 			let stringfiedProperty = null;
 
