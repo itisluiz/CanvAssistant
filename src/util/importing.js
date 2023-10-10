@@ -1,11 +1,11 @@
 import { readdir, readFile, writeFile } from 'fs/promises';
-import { join, extname } from 'path';
+import { join } from 'path';
 import CryptoJS from 'crypto-js';
 
-export async function importDirectory(directoryPath)
+export async function importDirectory(directoryPath, extension = '.js')
 {
 	const files = await readdir(directoryPath);
-	const jsFiles = files.filter(file => extname(file) === '.js');
+	const jsFiles = files.filter(file => file.endsWith(extension));
 
 	const importPromises = jsFiles.map(async (file) => {
 		const filePath = join(directoryPath, file);

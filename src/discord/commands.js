@@ -3,8 +3,8 @@ import { logInfo } from "../util/logging.js";
 
 export async function loadCommands(client)
 {
-	const commandModules = await importDirectory('./src/discord/commands');
-	const updatedHash = await checkUpdateHash('./src/discord/commands.md5', hashModules(commandModules, ['command'], true));
+	const commandModules = await importDirectory('./src/discord/commands', '.command.js');
+	const updatedHash = await checkUpdateHash('./src/discord/commands/commands.md5', hashModules(commandModules, ['command'], true));
 
 	if (!updatedHash)
 	{
