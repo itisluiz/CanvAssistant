@@ -4,18 +4,18 @@ export const modelName = 'User';
 export function define(sequelize)
 {
 	return sequelize.define(modelName, {
-		discordUID: {
+		discordId: {
 			type: DataTypes.CHAR(18),
-			allowNull: false,
 			primaryKey: true
 		},
-		canvasRealm: {
-			type: DataTypes.STRING,
-			defaultValue: null,
-		},
-		canvasToken: {
-			type: DataTypes.CHAR(70),
-			defaultValue: null,
+		canvasUserId: {
+			type: DataTypes.INTEGER.UNSIGNED,
+			allowNull: false
 		}
 	});
 };
+
+export function associate(models)
+{
+	models.User.belongsTo(models.Realm);
+}
