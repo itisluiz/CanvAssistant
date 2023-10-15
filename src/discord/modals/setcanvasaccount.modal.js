@@ -1,4 +1,4 @@
-import { ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
+import { ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle } from 'discord.js';
 
 export default new ModalBuilder()
 	.setCustomId('setcanvasaccount')

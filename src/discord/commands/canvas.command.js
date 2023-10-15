@@ -1,7 +1,7 @@
-import { SlashCommandBuilder } from "discord.js";
-import setcanvasaccountModal from "../modals/setcanvasaccount.modal.js";
-import normalizeUrl from "normalize-url";
-import { getCanvas } from "../../canvas/connection.js";
+import { SlashCommandBuilder } from 'discord.js';
+import setcanvasaccountModal from '../modals/setcanvasaccount.modal.js';
+import normalizeUrl from 'normalize-url';
+import { getCanvas } from '../../canvas/connection.js';
 
 export const command = new SlashCommandBuilder()
 	.setName('canvas')

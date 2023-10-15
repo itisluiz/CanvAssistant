@@ -1,4 +1,4 @@
-import { Events } from "discord.js";
+import { Events } from 'discord.js';
 
 export const event = Events.InteractionCreate;
 

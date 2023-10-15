@@ -1,5 +1,5 @@
-import chalk from "chalk";
-import CryptoJS from "crypto-js";
+import chalk from 'chalk';
+import CryptoJS from 'crypto-js';
 
 const logLevel = parseInt(process.env.LOG_LEVEL);
 const chalkColors = [chalk.red, chalk.green, chalk.yellow, chalk.blue, chalk.magenta, chalk.cyan, chalk.redBright, chalk.greenBright, chalk.yellowBright, chalk.blueBright, chalk.magentaBright, chalk.cyanBright];

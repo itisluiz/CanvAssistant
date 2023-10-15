@@ -1,5 +1,5 @@
-import { importDirectory } from "../util/importing.js";
-import { logInfo } from "../util/logging.js";
+import { importDirectory } from '../util/importing.js';
+import { logInfo } from '../util/logging.js';
 
 export async function loadModels(sequelize)
 {

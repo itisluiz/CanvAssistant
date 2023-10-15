@@ -1,7 +1,7 @@
-import { Client, GatewayIntentBits, Events } from "discord.js";
-import { loadCommands } from "./commands.js";
-import { registerEvents } from "./events.js";
-import { logInfo } from "../util/logging.js";
+import { Client, GatewayIntentBits, Events } from 'discord.js';
+import { loadCommands } from './commands.js';
+import { registerEvents } from './events.js';
+import { logInfo } from '../util/logging.js';
 
 let client = null;
 
