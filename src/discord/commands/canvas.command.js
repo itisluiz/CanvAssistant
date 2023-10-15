@@ -1,6 +1,7 @@
 import { SlashCommandBuilder } from "discord.js";
 import setcanvasaccountModal from "../modals/setcanvasaccount.modal.js";
 import normalizeUrl from "normalize-url";
+import { getCanvas } from "../../canvas/connection.js";
 
 export const command = new SlashCommandBuilder()
 	.setName('canvas')
@@ -27,6 +28,16 @@ export async function execute(interaction)
 
 			const realm = normalizeUrl(modalInteraction.fields.getTextInputValue('realm'));
 			const token = modalInteraction.fields.getTextInputValue('token').trim();
+
+			try {
+				// TODO: Polish URL
+				const { canvas, userData } = await getCanvas(realm, token);
+				modalInteraction.reply(userData.name);
+			}
+			catch(ex) {
+				modalInteraction.reply('error');
+				console.log(ex);
+			}
 			// TODO: Link account
 
 			break;
