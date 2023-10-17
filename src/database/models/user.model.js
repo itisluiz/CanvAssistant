@@ -8,14 +8,14 @@ export function define(sequelize)
 			type: DataTypes.CHAR(18),
 			primaryKey: true
 		},
-		canvasUserId: {
-			type: DataTypes.INTEGER.UNSIGNED,
-			allowNull: false
+		canvasToken: {
+			type: DataTypes.CHAR(70),
+			defaultValue: null
 		}
 	});
 };
 
 export function associate(models)
 {
-	models.User.belongsTo(models.Realm);
+	models.User.belongsTo(models.Realm, {foreignKey: 'realmId'});
 }

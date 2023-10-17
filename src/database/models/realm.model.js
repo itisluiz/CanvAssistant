@@ -9,14 +9,15 @@ export function define(sequelize)
 			autoIncrement: true,
 			primaryKey: true
 		},
-		normalizedUrl: {
+		url: {
 			type: DataTypes.STRING(512),
 			allowNull: false,
+			unique: true
 		}
 	});
 };
 
 export function associate(models)
 {
-	models.Realm.hasMany(models.User);
+	models.Realm.hasMany(models.User, {foreignKey: 'realmId'});
 }
