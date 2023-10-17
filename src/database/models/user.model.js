@@ -5,7 +5,7 @@ export function define(sequelize)
 {
 	return sequelize.define(modelName, {
 		discordId: {
-			type: DataTypes.CHAR(18),
+			type: DataTypes.CHAR(20),
 			primaryKey: true
 		},
 		canvasToken: {
