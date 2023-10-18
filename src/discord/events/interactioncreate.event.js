@@ -9,6 +9,6 @@ export async function execute(interaction)
 		const command = interaction.client.commands[interaction.commandName];
 
 		if (command)
-			command.execute(interaction);
+			await command.execute(interaction);
 	}
 }

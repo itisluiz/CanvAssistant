@@ -4,7 +4,7 @@ const Canvas = CanvasAPI.default;
 export async function getCanvas(realm, token)
 {
 	// Only HTTPS allowed anways, we're not sending tokens over HTTP
-	const canvas = new Canvas(`https://${realm}/api/v1`, token, {timeout: 6000});
+	const canvas = new Canvas(`https://${realm}/api/v1`, token, {timeout: 6500});
 	canvas.errorHandler = minimalErrorHandler;
 
 	const userRequest = await canvas.get('users/self');

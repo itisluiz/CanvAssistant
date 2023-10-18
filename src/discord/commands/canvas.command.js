@@ -2,7 +2,7 @@ import { assertActionOwnership, setActionOwner } from '../../util/asyncmutex.js'
 import { SlashCommandBuilder } from 'discord.js';
 import { getCanvas } from '../../canvas/connection.js';
 import { getSequelize } from '../../database/connection.js';
-import { persistentReply } from '../handling.js';
+import { fallbackReply, replies } from '../reply.js';
 import canvasprofileEmbed from '../embeds/canvasprofile.embed.js';
 import setcanvasaccountModal from '../modals/setcanvasaccount.modal.js';
 
@@ -33,7 +33,7 @@ async function subcommand_account_status(interaction)
 
 	if (!userEntry || !userEntry.canvasToken)
 	{
-		await interaction.reply({content: '`❌` No Canvas LMS account setup for your Discord account.', ephemeral: true});
+		await interaction.reply({content: replies.nocanvas, ephemeral: true});
 		return;
 	}
 	
@@ -121,13 +121,14 @@ export async function execute(interaction)
 	{
 		switch (ex.code)
 		{
+			case 'ETIMEDOUT':
 			case 'ENOTFOUND':
 			case 404:
-				persistentReply(interaction, "`❌` Couldn't access the page from the provided URL.");
+				fallbackReply(interaction, replies.badconnection);
 				break;
 
 			case 401:
-				persistentReply(interaction, "`❌` Authorization failed, the provided token is likely invalid.");
+				fallbackReply(interaction, replies.badtoken);
 				break;
 
 			default:
