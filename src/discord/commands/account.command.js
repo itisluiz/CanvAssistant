@@ -7,26 +7,22 @@ import canvasprofileEmbed from '../embeds/canvasprofile.embed.js';
 import setcanvasaccountModal from '../modals/setcanvasaccount.modal.js';
 
 export const command = new SlashCommandBuilder()
-	.setName('canvas')
+	.setName('account')
 	.setDescription('Canvas LMS account configuration')
-	.addSubcommandGroup(group => group
-		.setName('account')
-		.setDescription('Manage your Canvas LMS account integration')
-		.addSubcommand(subcommand => subcommand
-			.setName('status')
-			.setDescription('Show details about the currently linked Canvas LMS account')
-		)
-		.addSubcommand(subcommand => subcommand
-			.setName('setup')
-			.setDescription('Setup a new Canvas LMS account to be linked with your Discord account')
-		)
-		.addSubcommand(subcommand => subcommand
-			.setName('remove')
-			.setDescription('Remove the currently linked Canvas LMS account from your Discord account')
-		)
+	.addSubcommand(subcommand => subcommand
+		.setName('view')
+		.setDescription('Show details about the currently linked Canvas LMS account')
+	)
+	.addSubcommand(subcommand => subcommand
+		.setName('setup')
+		.setDescription('Setup a new Canvas LMS account to be linked with your Discord account')
+	)
+	.addSubcommand(subcommand => subcommand
+		.setName('remove')
+		.setDescription('Remove the currently linked Canvas LMS account from your Discord account')
 	);
 
-async function subcommand_account_status(interaction)
+async function subcommand_account_view(interaction)
 {
 	const { models } = await getSequelize();
 	const userEntry = await models.User.findByPk(interaction.user.id, {include: [{ model: models.Realm, as: 'Realm' }]});
@@ -98,11 +94,11 @@ export async function execute(interaction)
 	{
 		switch (interaction.options.getSubcommandGroup())
 		{
-			case 'account':
+			default:
 				switch (interaction.options.getSubcommand())
 				{
-					case 'status':
-						await subcommand_account_status(interaction);
+					case 'view':
+						await subcommand_account_view(interaction);
 						break;
 
 					case 'setup':
