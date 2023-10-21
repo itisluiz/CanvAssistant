@@ -1,6 +1,5 @@
 import { readdir, readFile, writeFile } from 'fs/promises';
 import { join } from 'path';
-import CryptoJS from 'crypto-js';
 
 export async function importDirectory(directoryPath, extension = '.js')
 {
@@ -26,30 +25,4 @@ export async function checkUpdateHash(hashFilePath, expectedHash)
 		await writeFile(hashFilePath, expectedHash, { encoding: 'utf-8', flag: 'w' });
 
 	return false;
-}
-
-export function hashModules(importedModules, exportFilter = [], isFilterWhitelist = false)
-{
-	let hashes = [];
-	for (const importedModule of importedModules)
-	{
-		for (const importedName in importedModule)
-		{
-			if ((!isFilterWhitelist && exportFilter.includes(importedName)) || (isFilterWhitelist && !exportFilter.includes(importedName)))
-				continue;
-
-			const importedProperty = importedModule[importedName];
-			let stringfiedProperty = null;
-
-			if (typeof importedProperty === 'object')
-				stringfiedProperty = JSON.stringify(importedProperty);
-			else
-				stringfiedProperty = importedProperty.toString();
-
-			hashes.push(CryptoJS.MD5(importedName + stringfiedProperty).toString());
-		}
-	}
-
-	const concatHash = hashes.sort().join('');
-	return CryptoJS.MD5(concatHash).toString();
 }

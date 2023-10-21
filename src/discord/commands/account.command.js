@@ -1,8 +1,8 @@
-import { assertActionOwnership, setActionOwner } from '../../util/asyncmutex.js';
 import { SlashCommandBuilder } from 'discord.js';
 import { getCanvas } from '../../canvas/connection.js';
 import { getSequelize } from '../../database/connection.js';
 import { fallbackReply, replies } from '../reply.js';
+import { showAndAwaitModal } from '../modals.js';
 import canvasprofileEmbed from '../embeds/canvasprofile.embed.js';
 import setcanvasaccountModal from '../modals/setcanvasaccount.modal.js';
 
@@ -41,16 +41,10 @@ async function subcommand_account_view(interaction)
 
 async function subcommand_account_setup(interaction)
 {
-	setActionOwner(interaction.id, interaction.user.id, setcanvasaccountModal.data.custom_id);
-	await interaction.showModal(setcanvasaccountModal);
-
-	let modalInteraction;
-	try { modalInteraction = await interaction.awaitModalSubmit({time: 60000}); }
-	catch { return; };
-
-	if (!assertActionOwnership(interaction.id, interaction.user.id, setcanvasaccountModal.data.custom_id))
+	const modalInteraction = await showAndAwaitModal(interaction, setcanvasaccountModal());
+	if (!modalInteraction)
 		return;
-	
+
 	// Strip protocol and /api/* if present, also strip trailing slash
 	const realm = modalInteraction.fields.getTextInputValue('realm').replace(/\/api\/.*/, '').replace(/^(https?:\/\/)?/, '').replace(/\/$/, '').trim();
 	const token = modalInteraction.fields.getTextInputValue('token').trim();
@@ -119,6 +113,7 @@ export async function execute(interaction)
 		{
 			case 'ETIMEDOUT':
 			case 'ENOTFOUND':
+			case 'ENETUNREACH':
 			case 404:
 				fallbackReply(interaction, replies.badconnection);
 				break;
