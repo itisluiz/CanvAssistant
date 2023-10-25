@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { getCanvas } from '../../canvas/connection.js';
 import { getSequelize } from '../../database/connection.js';
-import { fallbackReply, replies } from '../reply.js';
+import { fallbackReply } from '../fallback.js';
 import { showAndAwaitModal } from '../modals.js';
 import canvasprofileEmbed from '../embeds/canvasprofile.embed.js';
 import setcanvasaccountModal from '../modals/setcanvasaccount.modal.js';
@@ -29,7 +29,7 @@ async function subcommand_account_view(interaction)
 
 	if (!userEntry || !userEntry.canvasToken)
 	{
-		await interaction.reply({content: replies.nocanvas, ephemeral: true});
+		await interaction.reply({content: '`❌` You must setup your Canvas LMS account before you can view it!', ephemeral: true});
 		return;
 	}
 	
@@ -115,11 +115,11 @@ export async function execute(interaction)
 			case 'ENOTFOUND':
 			case 'ENETUNREACH':
 			case 404:
-				fallbackReply(interaction, replies.badconnection);
+				await fallbackReply(interaction, '`❌` Connection failed, could be due to a bad URL or connectivity issues.');
 				break;
 
 			case 401:
-				fallbackReply(interaction, replies.badtoken);
+				await fallbackReply(interaction, '`❌` Authorization failed, likely to be caused by a bad token.');
 				break;
 
 			default:

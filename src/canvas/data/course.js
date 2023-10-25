@@ -1,7 +1,7 @@
 import NodeCache from 'node-cache';
 
 const courseCache = new NodeCache({stdTTL: 900});
-export async function getCourses(canvas, noCache = false)
+export async function getSelfCourses(canvas, noCache = false)
 {
 	const cacheKey = canvas.uniqueUserId;
 

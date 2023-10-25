@@ -1,16 +1,6 @@
+import { protectedDiscordInteraction } from './fallback.js';
 import { importDirectory } from '../util/importing.js';
-import { logError, logInfo } from '../util/logging.js';
-import { fallbackReply } from './reply.js';
-
-async function safeEventExecute(eventModule, interaction)
-{
-	try { await eventModule.execute(interaction); }
-	catch (ex)
-	{
-		fallbackReply(interaction);
-		logError('discord', `Error throw at event "${eventModule.event}": (${ex.name || 'UnnamedException'}) ${ex.message || 'No message provided'}`);
-	}
-}
+import { logInfo } from '../util/logging.js';
 
 export async function registerEvents(client)
 {
@@ -18,5 +8,5 @@ export async function registerEvents(client)
 	logInfo('discord', `Registered ${eventModules.length} event(s)`);
 
 	for (const eventModule of eventModules)
-		client.on(eventModule.event, (interaction) => safeEventExecute(eventModule, interaction));
+		client.on(eventModule.event, (interaction) => protectedDiscordInteraction(eventModule, interaction));
 }
