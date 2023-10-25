@@ -1,4 +1,4 @@
-import { readdir, readFile, writeFile } from 'fs/promises';
+import { readdir } from 'fs/promises';
 import { join } from 'path';
 
 export async function importDirectory(directoryPath, extension = '.js')
@@ -13,16 +13,4 @@ export async function importDirectory(directoryPath, extension = '.js')
 	});
 
 	return await Promise.all(importPromises);;
-}
-
-export async function checkUpdateHash(hashFilePath, expectedHash)
-{
-	const containedHash = await readFile(hashFilePath, 'utf-8');
-
-	if (expectedHash === containedHash)
-		return true;
-	else
-		await writeFile(hashFilePath, expectedHash, { encoding: 'utf-8', flag: 'w' });
-
-	return false;
 }
