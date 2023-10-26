@@ -8,5 +8,5 @@ export async function registerEvents(client)
 	logInfo('discord', `Registered ${eventModules.length} event(s)`);
 
 	for (const eventModule of eventModules)
-		client.on(eventModule.event, (interaction) => protectedDiscordInteraction(eventModule, interaction));
+		client.on(eventModule.event, (interaction) => protectedDiscordInteraction(interaction, eventModule.execute));
 }

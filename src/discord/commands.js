@@ -2,6 +2,20 @@ import { importDirectory } from '../util/importing.js';
 import { dataHash, hashChanged } from '../util/hashing.js';
 import { logInfo } from '../util/logging.js';
 
+export function qualifiedCommandName(interaction)
+{
+	const qualifiedCommand = [];
+	
+	qualifiedCommand.push(interaction.commandName);
+	qualifiedCommand.push(interaction.options.getSubcommandGroup());
+	qualifiedCommand.push(interaction.options.getSubcommand());
+
+	if (interaction.isAutocomplete())
+		qualifiedCommand.push('autocomplete', interaction.options.getFocused(true).name);
+
+	return qualifiedCommand.filter(qualifier => qualifier).join('_');
+}
+
 export async function loadCommands(client)
 {
 	const commandModules = await importDirectory('./src/discord/commands', '.command.js');
@@ -11,7 +25,7 @@ export async function loadCommands(client)
 		await client.application.commands.set(commandModules.map(commandModule => commandModule.command));
 	}
 	
-	logInfo('discord', `Loaded ${commandModules.length} command(s)`);
+	logInfo('discord', `Loading ${commandModules.length} command(s)`);
 	return commandModules.reduce((acc, commandModule) => {
 		acc[commandModule.command.name] = commandModule
 		return acc;

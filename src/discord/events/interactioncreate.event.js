@@ -1,14 +1,15 @@
 import { Events } from 'discord.js';
+import { qualifiedCommandName } from '../commands.js';
 
 export const event = Events.InteractionCreate;
 
 export async function execute(interaction)
 {
-	if (interaction.isChatInputCommand())
-	{
-		const command = interaction.client.commands[interaction.commandName];
+	const commandModule = interaction.client.commands[interaction.commandName];
 
-		if (command)
-			await command.execute(interaction);
+	if (commandModule)
+	{
+		const qualifiedCommand = qualifiedCommandName(interaction);
+		await commandModule.protectedCommandInteraction(interaction, commandModule[qualifiedCommand]);
 	}
 }

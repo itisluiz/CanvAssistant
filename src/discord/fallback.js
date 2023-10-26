@@ -1,8 +1,8 @@
 import { logDebug, logError } from '../util/logging.js';
 
-export async function protectedDiscordInteraction(eventModule, interaction)
+export async function protectedDiscordInteraction(interaction, callback)
 {
-	try { await eventModule.execute(interaction); }
+	try { await callback(interaction); }
 	catch (ex)
 	{
 		if (interaction.isChatInputCommand())

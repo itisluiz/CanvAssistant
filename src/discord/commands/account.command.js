@@ -22,14 +22,14 @@ export const command = new SlashCommandBuilder()
 		.setDescription('Remove the currently linked Canvas LMS account from your Discord account')
 	);
 
-async function subcommand_account_view(interaction)
+export async function account_view(interaction)
 {
 	const { models } = await getSequelize();
 	const userEntry = await models.User.findByPk(interaction.user.id, {include: [{ model: models.Realm, as: 'Realm' }]});
 
 	if (!userEntry || !userEntry.canvasToken)
 	{
-		await interaction.reply({content: '`❌` You must setup your Canvas LMS account before you can view it!', ephemeral: true});
+		await interaction.reply({content: '`❗` You must setup your Canvas LMS account before you can view it!', ephemeral: true});
 		return;
 	}
 	
@@ -39,7 +39,7 @@ async function subcommand_account_view(interaction)
 	await interaction.followUp({embeds: [canvasprofileEmbed(userEntry.Realm.url, userData)]});
 }
 
-async function subcommand_account_setup(interaction)
+export async function account_setup(interaction)
 {
 	const modalInteraction = await showAndAwaitModal(interaction, setcanvasaccountModal());
 	if (!modalInteraction)
@@ -64,7 +64,7 @@ async function subcommand_account_setup(interaction)
 	await modalInteraction.followUp({content: `\`✅\` The account #**${userData.id}** has been linked!`, embeds: [canvasprofileEmbed(realm, userData)]});
 }
 
-async function subcommand_account_remove(interaction)
+export async function account_remove(interaction)
 {
 	const { models } = await getSequelize();
 	const userEntry = await models.User.findByPk(interaction.user.id);
@@ -82,46 +82,23 @@ async function subcommand_account_remove(interaction)
 	await interaction.reply({content: '`🗑️` Successfully removed your Canvas LMS account!', ephemeral: true});
 }
 
-export async function execute(interaction)
+export async function protectedCommandInteraction(interaction, callback)
 {
-	try
-	{
-		switch (interaction.options.getSubcommandGroup())
-		{
-			default:
-				switch (interaction.options.getSubcommand())
-				{
-					case 'view':
-						await subcommand_account_view(interaction);
-						break;
-
-					case 'setup':
-						await subcommand_account_setup(interaction);
-						break;
-
-					case 'remove':
-						await subcommand_account_remove(interaction);
-						break;
-				}
-				break;
-		}
-
-	}
+	try { await callback(interaction); }
 	catch (ex)
 	{
-		switch (ex.code)
+		switch (ex.name)
 		{
-			case 'ETIMEDOUT':
-			case 'ENOTFOUND':
-			case 'ENETUNREACH':
-			case 404:
+			case 'RequestError':
 				await fallbackReply(interaction, '`❌` Connection failed, could be due to a bad URL or connectivity issues.');
 				break;
 
-			case 401:
-				await fallbackReply(interaction, '`❌` Authorization failed, likely to be caused by a bad token.');
-				break;
-
+			case 'CanvasApiError':
+				if (ex.code === 401)
+					await fallbackReply(interaction, '`🔐` Authorization failed, this is likely to be caused by a bad token.');
+				else
+					throw ex;
+			
 			default:
 				throw ex;
 		}
