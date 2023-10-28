@@ -48,7 +48,7 @@ export async function course_view_autocomplete_coursename(interaction)
 	const { canvas } = await getCanvas(userEntry.Realm.url, userEntry.canvasToken, false);
 
 	const courses = await getSelfCourses(canvas);
-	const courseOptions = courses.map(course => {return {name: course.unbloated_name, value: course.uuid}});
+	const courseOptions = courses.map(course => {return {name: course.friendly_name, value: course.uuid}});
 
 	await filterAndRespondAutocomplete(interaction, courseOptions);
 }
