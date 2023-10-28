@@ -12,5 +12,5 @@ export async function getCanvas(realm, token, validate = true)
 	canvas.uniqueRealmId = dataHash(realm);
 	canvas.uniqueUserId = dataHash(realm, token);
 
-	return { canvas, userData: validate ? await getSelf(canvas, true) : null };
+	return { canvas, user: validate ? await getSelf(canvas, true) : null };
 }

@@ -34,9 +34,10 @@ export async function account_view(interaction)
 	}
 	
 	await interaction.deferReply();
-	const { userData } = await getCanvas(userEntry.Realm.url, userEntry.canvasToken);	
+	const { canvas } = await getCanvas(userEntry.Realm.url, userEntry.canvasToken);
 
-	await interaction.followUp({embeds: [canvasprofileEmbed(userEntry.Realm.url, userData)]});
+
+	await interaction.followUp({embeds: [await canvasprofileEmbed(interaction, canvas)]});
 }
 
 export async function account_setup(interaction)
@@ -51,7 +52,7 @@ export async function account_setup(interaction)
 
 	await modalInteraction.deferReply({ephemeral: true});
 
-	const { userData } = await getCanvas(realm, token);
+	const { user } = await getCanvas(realm, token);
 	const { models } = await getSequelize();
 
 	const [realmEntry, realmCreated] = await models.Realm.findOrCreate({where: {url: realm}});
@@ -61,7 +62,7 @@ export async function account_setup(interaction)
 	userEntry.realmId = realmEntry.realmId;
 	await userEntry.save();
 
-	await modalInteraction.followUp({content: `\`✅\` The account #**${userData.id}** has been linked!`, embeds: [canvasprofileEmbed(realm, userData)]});
+	await modalInteraction.followUp({content: `\`✅\` The account #**${user.id}** has been linked!`, embeds: [await canvasprofileEmbed(interaction, canvas)]});
 }
 
 export async function account_remove(interaction)
@@ -96,8 +97,11 @@ export async function protectedCommandInteraction(interaction, callback)
 			case 'CanvasApiError':
 				if (ex.code === 401)
 					await fallbackReply(interaction, '`🔐` Authorization failed, this is likely to be caused by a bad token.');
+				else if (ex.code === 404)
+					await fallbackReply(interaction, '`❌` Canvas LMS API not found for URL.');
 				else
 					throw ex;
+				break;
 			
 			default:
 				throw ex;

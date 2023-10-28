@@ -8,5 +8,11 @@ export async function registerEvents(client)
 	logInfo('discord', `Registered ${eventModules.length} event(s)`);
 
 	for (const eventModule of eventModules)
-		client.on(eventModule.event, (interaction) => protectedDiscordInteraction(interaction, eventModule.execute));
+		client.on(eventModule.event, (interaction) => protectedDiscordInteraction(prepareInteraction(interaction), eventModule.execute));
+}
+
+function prepareInteraction(interaction)
+{
+	interaction.memberUser = interaction.member ?? interaction.user;
+	return interaction;
 }

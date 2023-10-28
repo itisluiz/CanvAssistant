@@ -7,15 +7,15 @@ export async function getSelfCourses(canvas, noCache = false)
 
 	if (!courseCache.has(cacheKey) || noCache)
 	{
-		const coursesIterator = await canvas.listItems('courses', {'enrollment_state': 'active', 'include': ['teachers', 'total_students', 'total_scores']});
+		const coursesIterator = await canvas.listItems('courses', {'enrollment_state': 'active', 'include': ['teachers', 'total_students', 'public_description']});
 		const courses = [];
 		for await (const course of coursesIterator)
 		{
 			if (course.enrollment_term_id === 1)
 				continue;
 
-			course.unbloatedName = unbloatCourseName(course.name);
-			course.teacherNames = course.teachers.map(teacher => teacher.display_name);
+			course.unbloated_name = unbloatCourseName(course.name);
+			course.teacher_names = course.teachers.map(teacher => teacher.display_name);
 			courses.push(course);
 		}
 
