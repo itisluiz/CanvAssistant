@@ -52,7 +52,7 @@ export async function account_setup(interaction)
 
 	await modalInteraction.deferReply({ephemeral: true});
 
-	const { user } = await getCanvas(realm, token);
+	const { canvas, user } = await getCanvas(realm, token);
 	const { models } = await getSequelize();
 
 	const [realmEntry, realmCreated] = await models.Realm.findOrCreate({where: {url: realm}});
