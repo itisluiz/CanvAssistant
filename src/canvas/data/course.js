@@ -14,9 +14,7 @@ export async function getSelfCourses(canvas, noCache = false)
 			if (course.enrollment_term_id === 1)
 				continue;
 
-			console.log(course);
-			
-			course.friendly_name = course.friendly_name ?? unbloatCourseName(course.name);
+			course.friendly_name = course.friendly_name || unbloatCourseName(course.name);
 			course.teacher_names = course.teachers.map(teacher => teacher.display_name);
 			course.student_enrollment = course.enrollments.filter(enrollment => enrollment.role_id === 3)[0];
 			courses.push(course);
