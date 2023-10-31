@@ -4,7 +4,9 @@ import { getSequelize } from '../../database/connection.js';
 import { fallbackReply } from '../fallback.js';
 import { getSelfCourses } from '../../canvas/data/course.js';
 import { filterAndRespondAutocomplete } from '../autocomplete.js';
+import { assertButtonOwnership } from '../buttons.js';
 import canvascourseEmbed from '../embeds/canvascourse.embed.js';
+import canvascourseComponent from '../components/canvascourse.component.js';
 
 export const command = new SlashCommandBuilder()
 	.setName('course')
@@ -34,7 +36,7 @@ export async function course_view(interaction)
 	await interaction.deferReply();
 	const { canvas } = await getCanvas(userEntry.Realm.url, userEntry.canvasToken, false);
 
-	await interaction.followUp({embeds: [await canvascourseEmbed(interaction, canvas)]});
+	await interaction.followUp({embeds: [await canvascourseEmbed(interaction, canvas)], components: [...await canvascourseComponent(interaction, canvas)] });
 }
 
 export async function course_view_autocomplete_coursename(interaction)
@@ -48,9 +50,17 @@ export async function course_view_autocomplete_coursename(interaction)
 	const { canvas } = await getCanvas(userEntry.Realm.url, userEntry.canvasToken, false);
 
 	const courses = await getSelfCourses(canvas);
-	const courseOptions = courses.map(course => {return {name: course.friendly_name, value: course.uuid}});
+	const courseOptions = courses.map(course => {return {name: course.friendly_name, value: course.id.toString()}});
 
 	await filterAndRespondAutocomplete(interaction, courseOptions);
+}
+
+export async function course_announcements_button(interaction)
+{	
+	if (!await assertButtonOwnership(interaction))
+		return;
+
+	interaction.reply('TODO: Announcements!');
 }
 
 export async function protectedCommandInteraction(interaction, callback)

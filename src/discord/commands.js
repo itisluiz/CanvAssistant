@@ -6,12 +6,14 @@ export function qualifiedCommandName(interaction)
 {
 	const qualifiedCommand = [];
 	
-	qualifiedCommand.push(interaction.commandName);
-	qualifiedCommand.push(interaction.options.getSubcommandGroup());
-	qualifiedCommand.push(interaction.options.getSubcommand());
+	qualifiedCommand.push(interaction.targetModule);
+	qualifiedCommand.push(interaction.subAction);
+	qualifiedCommand.push(interaction.action);
 
 	if (interaction.isAutocomplete())
 		qualifiedCommand.push('autocomplete', interaction.options.getFocused(true).name);
+	else if (interaction.isButton())
+		qualifiedCommand.push('button');
 
 	return qualifiedCommand.filter(qualifier => qualifier).join('_');
 }

@@ -5,7 +5,7 @@ import { getSelfCourses } from '../../canvas/data/course.js';
 export default async function build(interaction, canvas)
 {
 	const [branding, courses] = await Promise.all([getBranding(canvas), getSelfCourses(canvas)]);
-	const course = courses.find(course => course.uuid === interaction.options.get('coursename').value);
+	const course = courses.find(course => course.id.toString() === interaction.options.get('coursename').value);
 
 	return new EmbedBuilder()
 		.setColor(0xE72429)

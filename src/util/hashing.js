@@ -35,7 +35,20 @@ export function randomHash()
 
 export function hashIdBuilder(identifier, ...data)
 {
-	return `${identifier}[${data.length > 0 ? dataHash(...data) : randomHash()}]`;
+	return `${identifier}@${data.length > 0 ? dataHash(...data) : randomHash()}`;
+}
+
+export function b64IdBuilder(identifier, ...data)
+{
+	const dataBytes = CryptoJS.enc.Utf8.parse(JSON.stringify(data.length > 1 ? data : data[0]));
+	return `${identifier}@${CryptoJS.enc.Base64.stringify(dataBytes)}`;
+}
+
+export function b64IdInterpreter(base64id)
+{
+	const [identifier, dataBase64] = base64id.split('@', 2);
+	const dataBytes = CryptoJS.enc.Base64.parse(dataBase64);
+	return { identifier, data: JSON.parse(CryptoJS.enc.Utf8.stringify(dataBytes)) };
 }
 
 export async function hashChanged(hashFile, hash)
