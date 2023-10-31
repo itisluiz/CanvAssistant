@@ -22,7 +22,7 @@ export async function execute(interaction)
 		interaction.metadata = data;
 	}
 
-	if (interaction.targetModule)
+	if (interaction.client.commands[interaction.targetModule])
 	{
 		const commandModule = interaction.client.commands[interaction.targetModule];
 		await commandModule.protectedCommandInteraction(interaction, commandModule[qualifiedCommandName(interaction)]);

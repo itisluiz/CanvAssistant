@@ -6,6 +6,7 @@ import { getSelfCourses } from '../../canvas/data/course.js';
 import { filterAndRespondAutocomplete } from '../autocomplete.js';
 import { assertButtonOwnership } from '../buttons.js';
 import canvascourseEmbed from '../embeds/canvascourse.embed.js';
+import canvasannoucementlistEmbed from '../embeds/canvasannoucementlist.embed.js';
 import canvascourseComponent from '../components/canvascourse.component.js';
 
 export const command = new SlashCommandBuilder()
@@ -60,7 +61,13 @@ export async function course_announcements_button(interaction)
 	if (!await assertButtonOwnership(interaction))
 		return;
 
-	interaction.reply('TODO: Announcements!');
+	const { models } = await getSequelize();
+	const userEntry = await models.User.findByPk(interaction.message.interaction.user.id, {include: [{ model: models.Realm, as: 'Realm' }]});
+
+	await interaction.deferReply();
+	const { canvas } = await getCanvas(userEntry.Realm.url, userEntry.canvasToken, false);
+
+	await interaction.followUp({embeds: [await canvasannoucementlistEmbed(interaction, canvas)]});
 }
 
 export async function protectedCommandInteraction(interaction, callback)
