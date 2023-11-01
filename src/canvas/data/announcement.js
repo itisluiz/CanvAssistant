@@ -12,7 +12,7 @@ export async function getAnnouncements(canvas, courseId, noCache = false)
 		const announcements = [];
 		for await (const announcement of announcementsIterator)
 		{
-            announcement.posted_at_timestamp = Math.floor(new Date(announcement.posted_at).getTime() / 1000);
+			announcement.posted_at_timestamp = Math.floor(new Date(announcement.posted_at).getTime() / 1000);
 			announcements.push(announcement);
 		}
 
